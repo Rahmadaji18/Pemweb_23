@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+</head>
+<body>
+    <h1>Simple Calculator</h1>
+    <div class="Calculator-Frame">
+        <input type="text" id="input1" title="Enter first input:" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+        <input type="text" id="input2" title="Enter second input:" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+        <br><br>
+        <button onclick="clearInputs()">AC</button>
+        <button onclick="deleteLastDigit()">DEL</button>
+        <button onclick="add()">+</button>
+        <button onclick="subtract()">-</button>
+        <button onclick="multiply()">x</button>
+        <button onclick="divide()">÷</button>
+    </div>
+    <p>Result : </p>
+    <input type="number" id="result" disabled>
+    <script>
+        function clearInputs() {
+            document.getElementById("input1").value = "";
+            document.getElementById("input2").value = "";
+            document.getElementById("result").value = "0";
+        }
+
+        function deleteLastDigit() {
+            const input1 = document.getElementById("input1");
+            const input2 = document.getElementById("input2");
+
+            input1.value = input1.value.slice(0, -1);
+            input2.value = input2.value.slice(0, -1);
+        }
+
+        function add() {
+            const input1 = parseFloat(document.getElementById("input1").value) || 0;
+            const input2 = parseFloat(document.getElementById("input2").value) || 0;
+            const result = input1 + input2;
+
+            document.getElementById("result").value = result;
+        }
+
+        function subtract() {
+            const input1 = parseFloat(document.getElementById("input1").value) || 0;
+            const input2 = parseFloat(document.getElementById("input2").value) || 0;
+            const result = input1 - input2;
+
+            document.getElementById("result").value = result;
+        }
+
+        function multiply() {
+            const input1 = parseFloat(document.getElementById("input1").value) || 0;
+            const input2 = parseFloat(document.getElementById("input2").value) || 0;
+            const result = input1 * input2;
+
+            document.getElementById("result").value = result;
+        }
+
+        function divide() {
+            const input1 = parseFloat(document.getElementById("input1").value) || 0;
+            const input2 = parseFloat(document.getElementById("input2").value) || 0;
+            if (input2 === 0) {
+                document.getElementById("result").value = "Cannot divide by zero";
+            } else {
+                const result = input1 / input2;
+                document.getElementById("result").value = result;
+            }
+        }
+    </script>
+</body>
+</html>
