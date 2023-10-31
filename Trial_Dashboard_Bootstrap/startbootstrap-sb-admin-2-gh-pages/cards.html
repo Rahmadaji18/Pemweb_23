@@ -253,6 +253,46 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 pt-5 pl-4 text-gray-800">Weather Forecasts</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto" style="width: 10%;">
+                                            <i class="fas fa-magnifying-glass-location fa-3x text-primary"></i>
+                                        </div>
+                                        <div class="col-8 mr-2">
+                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                Search any city</div>
+                                            <input class="form-control col-11 mr-sm-2" type="search" placeholder="Ex : Surabaya" aria-label="Search">
+                                        </div>
+                                        <div class="col-2 mr-2">
+                                            <button id="submitCity" class="btn btn-primary">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto" style="width: 10%;">
+                                            <i class="fas fa-cloud-sun fa-3x text-primary"></i>
+                                        </div>
+                                        <div class="col-8 mr-2">
+                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                Current Forecast</div>
+                                        </div>
+                                        <div id="currentWeather" class="col-12"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Footer -->
@@ -263,15 +303,8 @@
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
@@ -306,6 +339,60 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $("#submitCity").click(function () {
+                return getWeather();
+            });
+        });
+    
+        function getWeather() {
+            var city = $("#city").val();
+    
+            if (city !== '') {
+                $.ajax({
+                    url: 'http://api.openweathermap.org/data/2.5/weather?q=' + city + "&units=metric" + "&APPID=c10bb3bd22f90d636baa008b1529ee25",
+                    type: "GET",
+                    dataType: "jsonp",
+                    success: function (data) {
+                        var widget = showResults(data);
+    
+                        $("#showWeather").html(widget);
+    
+                        $("#city").val('');
+                    }
+                });
+            } else {
+                $("#error").html("<div class='alert alert-danger' id='errorCity'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>City field cannot be empty</div>");
+            }
+        }
+    
+        function showCurrentWeather(data) {
+            const temperature = data.main.temp;
+            const weatherDescription = data.weather[0].description;
+
+    const currentWeatherHTML = `
+        <h3><strong>Temperature</strong>: ${temperature} &deg;C</h3>
+        <h3><strong>Description</strong>: ${weatherDescription}</h3>
+    `;
+
+    $("#currentWeather").html(currentWeatherHTML);
+}
+
+// Modify the success callback in the getWeather function
+success: function (data) {
+    var widget = showResults(data);
+
+    $("#showWeather").html(widget);
+
+    // Call the function to display current weather in the "Current Forecast" section
+    showCurrentWeather(data);
+
+    $("#city").val('');
+}
+
+    </script>
+    
 </body>
 
 </html>
